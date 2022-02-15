@@ -1,0 +1,20 @@
+name = "perf-test"
+type = "javascript"
+
+account_id = ""
+workers_dev = true
+route = ""
+zone_id = ""
+compatibility_date = "2022-02-15"
+
+[build]
+command = "mkdir -p dist && cp ./index.mjs ./dist/index.mjs"
+
+[build.upload]
+format = "modules"
+main = "./index.mjs"
+
+[durable_objects]
+bindings = [
+  { name = "DurableObject", class_name = "DurableObject" } # Binding to our DurableObjectExample class
+]
