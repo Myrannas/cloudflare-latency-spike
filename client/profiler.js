@@ -29,6 +29,8 @@ class Connection {
 
     const socket = await this.connect();
 
+    const start = Date.now()
+
     setInterval(() => {
       socket.send(JSON.stringify({
         timestamp: Date.now(),
@@ -40,7 +42,10 @@ class Connection {
     socket.on('message', (messageSerialized) => {
       const message = JSON.parse(messageSerialized);
       const latency = Date.now() - message.timestamp;
-      stream.write(`${message.id},${latency},${message.sequence}\n`);
+      if (latency > 800) {
+        console.log(`Spike! on ${this.#id} from ${message.id}: ${latency}`)
+      }
+      stream.write(`${message.id},${latency},${message.sequence},${(Date.now() - start)/1000}\n`);
     });
 
     socket.on('error', (err) => {
